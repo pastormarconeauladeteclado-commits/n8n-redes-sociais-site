@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Autorização TikTok - n8n Redes Sociais</title>
+<style>
+body{font-family:Arial,Helvetica,sans-serif;max-width:760px;margin:40px auto;padding:0 20px;line-height:1.6;color:#111}
+button{font-size:1rem;padding:12px 18px}
+code{word-break:break-all}
+</style>
+</head>
+<body>
+<main>
+<h1>Autorização do TikTok</h1>
+<p id="status" role="status" aria-live="polite">Recebendo a autorização…</p>
+<p>Esta página é usada somente para concluir a autorização da aplicação n8n Redes Sociais.</p>
+<button id="continuar" type="button">Continuar no n8n deste computador</button>
+</main>
+<script>
+(function(){
+  const qs=window.location.search||"";
+  const target="http://127.0.0.1:5678/webhook/tiktok-oauth-callback"+qs;
+  const status=document.getElementById("status");
+  const btn=document.getElementById("continuar");
+  btn.addEventListener("click",function(){window.location.href=target;});
+  if(new URLSearchParams(qs).get("error")){
+    status.textContent="O TikTok retornou um erro ou a autorização foi cancelada.";
+    return;
+  }
+  if(new URLSearchParams(qs).get("code")){
+    status.textContent="Autorização recebida. Encaminhando para o n8n local…";
+    setTimeout(function(){window.location.href=target;},500);
+  }else{
+    status.textContent="Nenhum código de autorização foi recebido.";
+  }
+})();
+</script>
+</body>
+</html>
